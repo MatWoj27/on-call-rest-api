@@ -1,5 +1,7 @@
 package reactor_rest_api.models;
 
+import java.io.*;
+
 public class Reactor {
     private String name;
     private String mail;
@@ -9,6 +11,20 @@ public class Reactor {
         this.name = name;
         this.mail = mail;
         this.phoneNumber = phoneNumber;
+    }
+
+    public static Reactor fromCSV(File csvFile) {
+        Reactor reactor = null;
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(csvFile))) {
+            String line = bufferedReader.readLine();
+            if (line != null) {
+                String[] data = line.split(",");
+                reactor = new Reactor(data[0], data[1], data[2]);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return reactor;
     }
 
     public String getName() {
